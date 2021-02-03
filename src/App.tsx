@@ -1,5 +1,7 @@
 import {useState} from 'react';
 import { useQuery } from 'react-query'
+// Components
+import Item from "./item/Item"
 import Drawer from '@material-ui/core/Drawer'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Grid from '@material-ui/core/Grid'
@@ -25,15 +27,33 @@ const getProducts = async (): Promise<CartItemType[]> => await(
   .json()
 
 const App = () => {
+  const [cartOpen, setCArtOpen] = useState<boolean>(false)
   const { data,isLoading, error } = useQuery<CartItemType[]>("products", getProducts)
   
+  const getTotalItems = () => null;
+
+  const handleAddToCart = (clickedItem: CartItemType) => null;
+  
+  const handleRemoveFromCart = () => null;
+
   if(error) return <div>Error</div>
   if(isLoading) return <LinearProgress/>
 
 
   return (
     <div className="App">
-      <h1>Test</h1>
+      <Wrapper>
+        <Grid container spacing={3}>
+          {
+            data?.map((item: CartItemType) => (
+              <Grid item key={item.id} xs={12} sm={4}>
+                <Item item={item} handleAddToCart={handleAddToCart}/>
+              </Grid>
+            ))
+          }
+        </Grid>
+      </Wrapper>
+      
     </div>
   );
 }
